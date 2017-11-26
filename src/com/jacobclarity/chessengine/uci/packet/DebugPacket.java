@@ -8,22 +8,22 @@ import com.jacobclarity.chessengine.uci.UciTokenData;
  */
 public class DebugPacket implements UciPacket
 {
-    private final boolean shouldDebug;
+    private final boolean debug;
 
     public DebugPacket(boolean shouldDebug)
     {
-        this.shouldDebug = shouldDebug;
+        this.debug = shouldDebug;
     }
 
     public boolean shouldDebug()
     {
-        return shouldDebug;
+        return debug;
     }
 
     @Override
     public String toCommandString()
     {
-        return "debug " + (shouldDebug ? "on" : "off");
+        return "debug " + (debug ? "on" : "off");
     }
 
     @Override
