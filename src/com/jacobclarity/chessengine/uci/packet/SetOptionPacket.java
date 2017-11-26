@@ -1,6 +1,7 @@
 package com.jacobclarity.chessengine.uci.packet;
 
 import com.jacobclarity.chessengine.uci.UciTokenData;
+import com.jacobclarity.chessengine.uci.option.UciOption;
 
 /*
  * Packet sent by GUI to set particular options offered by engine
@@ -30,7 +31,7 @@ public class SetOptionPacket implements UciPacket
     @Override
     public String toCommandString()
     {
-        return "setoption " + name + " " + value;
+        return "setoption " + name + " value " + value;
     }
 
     @Override
@@ -41,6 +42,6 @@ public class SetOptionPacket implements UciPacket
 
     public static UciPacket parsePacket(UciTokenData tokens[])
     {
-        return null;
+        return UciOption.parsePacket(tokens);
     }
 }
