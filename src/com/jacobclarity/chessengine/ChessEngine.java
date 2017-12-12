@@ -1,6 +1,6 @@
 package com.jacobclarity.chessengine;
 
-import com.jacobclarity.chessengine.uci.UciPacketHandler;
+import com.jacobclarity.chessengine.uci.controller.UciPacketHandler;
 import com.jacobclarity.chessengine.uci.UciProtocolHandler;
 
 public class ChessEngine
