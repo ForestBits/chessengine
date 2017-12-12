@@ -3,6 +3,7 @@ package com.jacobclarity.chessengine.uci;
 import com.jacobclarity.chessengine.game.NotationException;
 import com.jacobclarity.chessengine.uci.packet.*;
 
+import java.io.File;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,14 +28,20 @@ public class UciProtocolHandler implements Runnable, UciOutputPacketHandler
 
         UciTokenizer tokenizer = new UciTokenizer();
 
+        //all UCI commands start with a unique token, so we can determine how to parse it
+        //based off of the first token
+
         Map<UciToken, UciParseFunction> parseFunctions = new HashMap<>();
 
         parseFunctions.put(UciToken.DEBUG, DebugPacket::parsePacket);
         parseFunctions.put(UciToken.IS_READY, IsReadyPacket::parsePacket);
         parseFunctions.put(UciToken.UCI_NEW_GAME, NewGamePacket::parsePacket);
         parseFunctions.put(UciToken.POSITION, PositionPacket::parsePacket);
+        parseFunctions.put(UciToken.QUIT, QuitPacket::parsePacket);
         parseFunctions.put(UciToken.REGISTER, RegisterPacket::parsePacket);
+        parseFunctions.put(UciToken.GO, SearchPacket::parsePacket);
         parseFunctions.put(UciToken.SET_OPTION, SetOptionPacket::parsePacket);
+        parseFunctions.put(UciToken.STOP, StopSearchPacket::parsePacket);
         parseFunctions.put(UciToken.UCI, UseUciPacket::parsePacket);
 
 
