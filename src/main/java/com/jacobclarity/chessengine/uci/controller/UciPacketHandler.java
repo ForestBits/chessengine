@@ -61,7 +61,7 @@ public class UciPacketHandler implements Runnable, UciInputPacketHandler
     @Override
     public void run()
     {
-        System.out.println("Packet handler thread");
+
     }
 
     @Override
