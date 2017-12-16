@@ -5,6 +5,7 @@ import com.jacobclarity.chessengine.uci.UciInputPacketHandler;
 import com.jacobclarity.chessengine.uci.UciOutputPacketHandler;
 import com.jacobclarity.chessengine.uci.option.UciOption;
 import com.jacobclarity.chessengine.uci.packet.*;
+import org.apache.commons.cli.CommandLine;
 
 //acts as bridge between UciProtocolHandler, which handles input and output via UCI protocol, and
 //the actual controller, which does the calculations. UciPacketHandler translates UCI protocol commands
@@ -17,6 +18,8 @@ public class UciPacketHandler implements Runnable, UciInputPacketHandler
     private final Engine engine = new Engine();
 
     private UciState currentState = UciState.STARTUP;
+
+    private final CommandLine commandLine;
 
     private boolean debug = false;
 
@@ -51,6 +54,11 @@ public class UciPacketHandler implements Runnable, UciInputPacketHandler
     private void handleSearchPackets(UciPacket packet)
     {
 
+    }
+
+    public UciPacketHandler(CommandLine commandLine)
+    {
+        this.commandLine = commandLine;
     }
 
     public void setOutputPacketHandler(UciOutputPacketHandler outputHandler)
