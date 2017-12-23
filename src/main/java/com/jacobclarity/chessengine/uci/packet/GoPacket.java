@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 //Packet sent with search parameters on the current position
-public class SearchPacket implements UciPacket
+public class GoPacket implements UciPacket
 {
     private final Move[] searchMoves;
 
@@ -28,8 +28,8 @@ public class SearchPacket implements UciPacket
     private final int nodes;
     private final int mateWithin;
 
-    public SearchPacket(Move[] searchMoves, boolean ponder, boolean infinite, long whiteTime, long blackTime,
-                        long whiteIncrement, long blackIncrement, long moveWithin, int movesToGo, int depth, int nodes, int mateWithin)
+    public GoPacket(Move[] searchMoves, boolean ponder, boolean infinite, long whiteTime, long blackTime,
+                    long whiteIncrement, long blackIncrement, long moveWithin, int movesToGo, int depth, int nodes, int mateWithin)
     {
         this.searchMoves = Arrays.copyOf(searchMoves, searchMoves.length);
         this.ponder = ponder;
@@ -420,7 +420,7 @@ public class SearchPacket implements UciPacket
 
         //at this point, we have parsed all the provided options
 
-        return new SearchPacket(searchMoves, ponder, infinite, whiteTime, blackTime, whiteIncrement, blackIncrement,
+        return new GoPacket(searchMoves, ponder, infinite, whiteTime, blackTime, whiteIncrement, blackIncrement,
                                 moveWithin, movesToGo, depth, nodes, mateWithin);
     }
 }

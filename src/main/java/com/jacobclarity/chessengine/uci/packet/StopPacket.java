@@ -3,7 +3,7 @@ package com.jacobclarity.chessengine.uci.packet;
 import com.jacobclarity.chessengine.uci.UciTokenData;
 
 //packet sent to make engine stop searching and deliver bestmove
-public class StopSearchPacket implements UciPacket
+public class StopPacket implements UciPacket
 {
     @Override
     public String toCommandString()
@@ -13,6 +13,6 @@ public class StopSearchPacket implements UciPacket
 
     public static UciPacket parsePacket(UciTokenData[] tokens)
     {
-        return new StopSearchPacket();
+        return new StopPacket();
     }
 }
