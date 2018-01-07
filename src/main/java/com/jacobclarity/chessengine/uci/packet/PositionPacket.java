@@ -24,7 +24,9 @@ public class PositionPacket implements UciPacket
     public PositionPacket(Board board, Move[] moves)
     {
         this.board = board;
-        this.moves = moves;
+
+        //make handling easier for later callers by ensuring array isn't null
+        this.moves = moves == null ? new Move[0] : moves;
     }
 
     public Board getBoard()
@@ -81,7 +83,7 @@ public class PositionPacket implements UciPacket
             String[] values = tokens[0].getValues();
 
             if (values.length != 1 || !values[0].equalsIgnoreCase("startpos"))
-                throw new NotationException("expected \"startpos\"");
+                throw new NotationException("only one token, expected single value \"startpos\" - did you forget \"moves\"?");
 
             return new PositionPacket(new Board(Board.START_POSITION), null);
         }
