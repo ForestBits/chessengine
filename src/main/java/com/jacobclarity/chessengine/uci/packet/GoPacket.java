@@ -31,7 +31,7 @@ public class GoPacket implements UciPacket
     public GoPacket(Move[] searchMoves, boolean ponder, boolean infinite, long whiteTime, long blackTime,
                     long whiteIncrement, long blackIncrement, long moveWithin, int movesToGo, int depth, int nodes, int mateWithin)
     {
-        this.searchMoves = Arrays.copyOf(searchMoves, searchMoves.length);
+        this.searchMoves = searchMoves == null ? new Move[0] : Arrays.copyOf(searchMoves, searchMoves.length);
         this.ponder = ponder;
         this.infinite = infinite;
         this.whiteTime = whiteTime;
