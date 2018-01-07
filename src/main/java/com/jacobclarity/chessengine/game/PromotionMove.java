@@ -1,5 +1,7 @@
 package com.jacobclarity.chessengine.game;
 
+import java.util.Objects;
+
 public class PromotionMove extends Move
 {
     private final PieceType promotionPiece;
@@ -42,5 +44,30 @@ public class PromotionMove extends Move
 
         //if we fall through the loop, the piece letter is unknown
         throw new NotationException("Unknown piece letter in move, expected k,q,r,b,n, got " + promotionLetter);
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        //returns false when comparing against Move instance that isn't a PromotionMove, see Move.equals for commentary
+
+        if (this == object)
+            return true;
+
+        if (object == null)
+            return false;
+
+        if (this.getClass() != object.getClass())
+            return false;
+
+        PromotionMove other = (PromotionMove) object;
+
+        return from.equals(other.from) && to.equals(other.to) && promotionPiece == other.promotionPiece;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(from, to, promotionPiece);
     }
 }
