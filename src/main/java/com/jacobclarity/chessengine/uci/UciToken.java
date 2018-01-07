@@ -63,6 +63,7 @@ public enum UciToken
     MINIMUM("min"),
     MAXIMUM("max"),
     VAR("var"),
+    PRINT_BOARD("printboard"), //not in UCI spec, custom to engine for debug purposes
     UNKNOWN(null);
 
 

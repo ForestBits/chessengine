@@ -4,10 +4,8 @@ import com.jacobclarity.chessengine.game.NotationException;
 import com.jacobclarity.chessengine.uci.packet.*;
 import org.apache.commons.cli.CommandLine;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -62,75 +60,78 @@ public class UciProtocolHandler implements Runnable, UciOutputPacketHandler
     @Override
     public void run()
     {
-        Scanner in = new Scanner(System.in);
-
-        PrintStream out = System.out;
-
-        UciTokenizer tokenizer = new UciTokenizer();
-
-        //all UCI commands start with a unique token, so we can determine how to parse it
-        //based off of the first token
-
-        Map<UciToken, UciParseFunction> parseFunctions = new HashMap<>();
-
-        parseFunctions.put(UciToken.DEBUG, DebugPacket::parsePacket);
-        parseFunctions.put(UciToken.IS_READY, IsReadyPacket::parsePacket);
-        parseFunctions.put(UciToken.UCI_NEW_GAME, NewGamePacket::parsePacket);
-        parseFunctions.put(UciToken.POSITION, PositionPacket::parsePacket);
-        parseFunctions.put(UciToken.QUIT, QuitPacket::parsePacket);
-        parseFunctions.put(UciToken.REGISTER, RegisterPacket::parsePacket);
-        parseFunctions.put(UciToken.GO, SearchPacket::parsePacket);
-        parseFunctions.put(UciToken.SET_OPTION, SetOptionPacket::parsePacket);
-        parseFunctions.put(UciToken.STOP, StopSearchPacket::parsePacket);
-        parseFunctions.put(UciToken.UCI, UseUciPacket::parsePacket);
-
-
-        while (true)
+        try
         {
-            String line = in.nextLine();
+            Scanner in = new Scanner(System.in);
 
-            if (debug)
-                debugFile.println(line);
+            PrintStream out = System.out;
 
-            if (line.trim().length() == 0) //blank line
-                continue;
+            UciTokenizer tokenizer = new UciTokenizer();
 
-            //valid line of some type
+            //all UCI commands start with a unique token, so we can determine how to parse it
+            //based off of the first token
 
-            UciTokenData[] tokens = tokenizer.getTokensFromLine(line);
+            Map<UciToken, UciParseFunction> parseFunctions = new HashMap<>();
 
-            UciToken firstToken = tokens[0].getToken();
+            parseFunctions.put(UciToken.DEBUG, DebugPacket::parsePacket);
+            parseFunctions.put(UciToken.IS_READY, IsReadyPacket::parsePacket);
+            parseFunctions.put(UciToken.UCI_NEW_GAME, UciNewGamePacket::parsePacket);
+            parseFunctions.put(UciToken.POSITION, PositionPacket::parsePacket);
+            parseFunctions.put(UciToken.QUIT, QuitPacket::parsePacket);
+            parseFunctions.put(UciToken.REGISTER, RegisterPacket::parsePacket);
+            parseFunctions.put(UciToken.GO, GoPacket::parsePacket);
+            parseFunctions.put(UciToken.SET_OPTION, SetOptionPacket::parsePacket);
+            parseFunctions.put(UciToken.STOP, StopPacket::parsePacket);
+            parseFunctions.put(UciToken.UCI, UseUciPacket::parsePacket);
+            parseFunctions.put(UciToken.PRINT_BOARD, PrintBoardPacket::parsePacket);
 
-            UciParseFunction func = parseFunctions.get(firstToken);
 
-            if (func == null)
-            {
-                String string = "Unknown command";
-
-                System.out.println(string);
+            while (true) {
+                String line = in.nextLine();
 
                 if (debug)
-                    debugFile.println(string);
-            }
-            else
-            {
-                try
-                {
-                    UciPacket packet = func.parsePacket(tokens);
+                    debugFile.println(line);
 
-                    packetHandler.handleInputPacket(packet);
-                }
+                if (line.trim().length() == 0) //blank line
+                    continue;
 
-                catch (UciParseException | NotationException ex)
-                {
-                    String string = "Bad command: " + ex.getMessage();
+                //valid line of some type
+
+                UciTokenData[] tokens = tokenizer.getTokensFromLine(line);
+
+                UciToken firstToken = tokens[0].getToken();
+
+                UciParseFunction func = parseFunctions.get(firstToken);
+
+                if (func == null) {
+                    String string = "Unknown command";
 
                     System.out.println(string);
 
                     if (debug)
                         debugFile.println(string);
+                } else {
+                    try {
+                        UciPacket packet = func.parsePacket(tokens);
+
+                        packetHandler.handleInputPacket(packet);
+                    } catch (UciParseException | NotationException ex) {
+                        String string = "Bad command: " + ex.getMessage();
+
+                        System.out.println(string);
+
+                        if (debug)
+                            debugFile.println(string);
+                    }
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace(System.out);
+
+            if (debug)
+                ex.printStackTrace(debugFile);
         }
     }
 
