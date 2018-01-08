@@ -275,14 +275,14 @@ public class MoveFinder
         if (castleAbility.canCastleQueenside())
         {
             //every square we pass through or end on must be empty
-            for (int i = 1; i <= 3; ++i)
+            for (int i = 1; i <= 2; ++i)
             {
                 Square s = new Square(square.getFile() - i, square.getRank());
 
                 if (position.getPieceAt(s) != null)
                     break;
 
-                if (i == 3) //we are on the last square and everything has been empty
+                if (i == 2) //we are on the last square and everything has been empty
                     moves.add(new Move(square, s));
             }
         }
