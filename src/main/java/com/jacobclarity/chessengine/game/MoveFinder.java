@@ -242,7 +242,6 @@ public class MoveFinder
                 1, 0,
                 1, -1,
                 0, 1,
-                0, 0,
                 0, -1,
                 -1, 1,
                 -1, 0,
@@ -250,7 +249,7 @@ public class MoveFinder
         };
 
         //for each potential square
-        for (int i = 0; i < 9; ++i)
+        for (int i = 0; i < 8; ++i)
         {
             Square possibleSquare = new Square(square.getFile() + offsets[i*2],
                                                square.getRank() + offsets[i*2 + 1]);
