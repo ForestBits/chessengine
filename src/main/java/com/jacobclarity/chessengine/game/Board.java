@@ -476,17 +476,23 @@ public class Board
 
         if (rookMove) //if a rook moved, we cannot castle on that side anymore
         {
-            boolean kingside = move.getFrom().getFile() == 7;
+            //if a piece ever moves from the square the rook was on at the start, then either the rook moved
+            //or was already captured - in either case, we cannot castle there
+
+            int homeRank = turn == PieceColor.WHITE ? 0 : 7;
+
+            boolean kingsideMoved = move.getFrom().getFile() == 7 && move.getFrom().getRank() == homeRank;
+            boolean queensideMoved = move.getFrom().getFile() == 0 && move.getFrom().getRank() == homeRank;
 
             CastleAbility ability = getCastleAbility(turn);
 
             //while we can no longer castle on the respective side, we might be able to
             //on the other side, so preserve it if it exists
 
-            if (kingside)
+            if (kingsideMoved)
                 setCastleAbility(turn,
                         ability.canCastleQueenside() ? CastleAbility.QUEENSIDE : CastleAbility.NONE);
-            else //moved queenside rook
+            else if (queensideMoved)
                 setCastleAbility(turn,
                         ability.canCastleKingside() ? CastleAbility.KINGSIDE : CastleAbility.NONE);
         }
