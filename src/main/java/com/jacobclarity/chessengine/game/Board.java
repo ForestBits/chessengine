@@ -299,9 +299,10 @@ public class Board
             List<Square> movementSquares = new ArrayList<>();
 
             int castleOffsetDirection = Integer.signum(to.getFile() - from.getFile());
-            int moveLength = castleOffsetDirection > 0 ? 2 : 3; //going to the right is kingside, else queenside
 
-            for (int i = 1; i <= moveLength; ++i)
+            //regardless of direction, the king always moves 2 squares, so we check 2 squares from the king
+
+            for (int i = 1; i <= 2; ++i)
                 movementSquares.add(new Square(from.getFile() + castleOffsetDirection*i, from.getRank()));
 
             //now check each square and see if it is under check
