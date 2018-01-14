@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# usage: convert-pgn-to-san filename.pgn output.txt
+# uses pgn-extract to get data, then removes invalid lines from the data that carried over from the original input
+pgn-extract -Wuci --notags --noresults $1 | sed '/0-1/d' | sed '/1-0/d' | sed '/1\/2-1\/2/d' | sed '/\*/d' | sed '/=/d' | sed '/+\/=/d' | sed '/=\/+/d' | sed '/+\/-/d' | sed '/-\/+/d' | sed '/+-/d' | sed '/-+/d' > $2

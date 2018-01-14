@@ -39,16 +39,20 @@ public class MovegenTest
             {
                 String fileContents = new String(Files.readAllBytes(Paths.get(f.getAbsolutePath())));
 
-                //the file contents of each file contains one full game per line, followed by a blank line,
-                //and then the next game. We can split on these blank lines, leaving the games
+                //every line in the file is either blank, or contains a full game
 
-                //a blank line is a double newline
-                String doubleNewline = System.getProperty("line.separator") + System.getProperty("line.separator");
+                BufferedReader reader = new BufferedReader(new StringReader(fileContents));
 
-                String[] gameLines = fileContents.split(doubleNewline);
+                while (true)
+                {
+                    String line = reader.readLine();
 
-                for (String line : gameLines)
-                    moveLists.add(line);
+                    if (line == null) //end of file
+                        break;
+
+                    if (!line.isEmpty())
+                        moveLists.add(line);
+                }
             }
         }
 
