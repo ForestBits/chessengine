@@ -502,19 +502,30 @@ public class Board
         {
             //same as the rook move case, more or less, just captured instead of moved
 
-            boolean kingside = move.getTo().getFile() == 7;
+            //note that the captured rook can be from either player
+            //the rook capture only affects castling if it hasn't yet moved, which means
+            //that it is still in one of the four corners, so we can update state based on that
+            //note this still works even if the rook on that square is not the original rook
 
-            CastleAbility ability = getCastleAbility(turn);
+            boolean whiteQueenside = move.getTo().getFile() == 0 && move.getTo().getRank() == 0;
+            boolean whiteKingside = move.getTo().getFile() == 7 && move.getTo().getRank() == 0;
+            boolean blackQueenside = move.getTo().getFile() == 0 && move.getTo().getRank() == 7;
+            boolean blackKingside = move.getTo().getFile() == 7 && move.getTo().getRank() == 7;
 
-            //while we can no longer castle on the respective side, we might be able to
-            //on the other side, so preserve it if it exists
+            //for the above condition that may be true, we deduct the respective castling ability
+            //but we must retain the existing castle ability, if it exists
 
-            if (kingside)
-                setCastleAbility(turn,
-                        ability.canCastleQueenside() ? CastleAbility.QUEENSIDE : CastleAbility.NONE);
-            else //moved queenside rook
-                setCastleAbility(turn,
-                        ability.canCastleKingside() ? CastleAbility.KINGSIDE : CastleAbility.NONE);
+            if (whiteQueenside)
+                setCastleAbility(PieceColor.WHITE, whiteCastleAbility.canCastleKingside() ? CastleAbility.KINGSIDE : CastleAbility.NONE);
+
+            if (whiteKingside)
+                setCastleAbility(PieceColor.WHITE, whiteCastleAbility.canCastleQueenside() ? CastleAbility.QUEENSIDE : CastleAbility.NONE);
+
+            if (blackQueenside)
+                setCastleAbility(PieceColor.BLACK, blackCastleAbility.canCastleKingside() ? CastleAbility.KINGSIDE : CastleAbility.NONE);
+
+            if (blackKingside)
+                setCastleAbility(PieceColor.BLACK, blackCastleAbility.canCastleQueenside() ? CastleAbility.QUEENSIDE : CastleAbility.NONE);
         }
 
         //if a pawn double-move was made, we need to set the e.p. target square
